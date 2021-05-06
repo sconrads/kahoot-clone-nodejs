@@ -126,7 +126,8 @@ function updateTimer(){
     timer = setInterval(function(){
         time -= 1;
         document.getElementById('num').textContent = " " + time;
-        if(time == 0){
+        if(time <= 0){
+            window.console.log("Tiden er ute")
             socket.emit('timeUp');
         }
     }, 1000);
