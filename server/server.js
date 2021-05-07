@@ -128,7 +128,7 @@ io.on('connection', (socket) => {
             //If the pin is equal to one of the game's pin
             if(params.pin == games.games[i].pin){
                 
-                console.log('Player connected to game');
+                console.log('Player connected to game: ' + params.name);
                 
                 var hostId = games.games[i].hostId; //Get the id of host of game
                 
@@ -276,18 +276,24 @@ io.on('connection', (socket) => {
     
     
     socket.on('timeUp', function(){
+        console.log("Fikk en timeUp event");
         var game = games.getGame(socket.id);
+        console.log("Hentet spill");
         game.gameData.questionLive = false;
         var playerData = players.getPlayers(game.hostId);
-        
+        console.log("Hentet spilldata");
+
         var gameQuestion = game.gameData.question;
+        console.log("GameQuestion er: " + gameQuestion);
         var gameid = game.gameData.gameid;
+        console.log("Gameid er: " + gameid);
             
             MongoClient.connect(url, function(err, db){
                 if (err) throw err;
     
                 var dbo = db.db('kahootDB');
                 var query = { id:  parseInt(gameid)};
+                console.log("queryId: " + query.id);
                 dbo.collection("kahootGames").find(query).toArray(function(err, res) {
                     if (err) throw err;
                     var correctAnswer = res[0].questions[gameQuestion - 1].correct;
